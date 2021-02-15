@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CLMDB",
+        "repositoryURL": "https://github.com/tannerdsilva/CLMDB.git",
+        "state": {
+          "branch": "master",
+          "revision": "00fad88ae71bed8bd97475c7557121249da4cc98",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
