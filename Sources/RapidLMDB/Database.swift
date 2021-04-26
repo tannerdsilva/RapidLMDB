@@ -50,11 +50,17 @@ public struct Database {
 		var statObj = MDB_stat()
 		if tx != nil { 
 			let getStatTry = mdb_stat(tx!.handle, db_handle, &statObj)
+			guard getStatTry == 0 else {
+				throw LMDBError(returnCode:getStatTry)
+			}
 			return Statistics(pageSize:statObj.ms_psize, depth:statObj.ms_depth, branch_pages:statObj.ms_branch_pages, leaf_pages:statObj.ms_leaf_pages, overflow_pages:statObj.ms_overflow_pages, entries:statObj.ms_entries)	
 		} else {
 			return try Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
 				var statObj = MDB_stat()
 				let getStatTry = mdb_stat(someTransaction.handle, db_handle, &statObj)
+				guard getStatTry == 0 else {
+					throw LMDBError(returnCode:getStatTry)
+				}
 				return Statistics(pageSize:statObj.ms_psize, depth:statObj.ms_depth, branch_pages:statObj.ms_branch_pages, leaf_pages:statObj.ms_leaf_pages, overflow_pages:statObj.ms_overflow_pages, entries:statObj.ms_entries)	
 			}
 		}
