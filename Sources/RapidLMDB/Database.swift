@@ -72,7 +72,7 @@ public struct Database {
 			mdb_dbi_flags(tx!.handle, db_handle, &captureFlags)
 			return Flags(rawValue:captureFlags)
 		} else {
-			return try Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
+			return Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
 				mdb_dbi_flags(someTransaction.handle, db_handle, &captureFlags)
 				return Flags(rawValue:captureFlags)
 			}
@@ -100,7 +100,7 @@ public struct Database {
 					throw LMDBError(returnCode:valueResult)
 				}
 			} else {
-				let valueResult = try Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
+				let valueResult = Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
 					return mdb_get(someTransaction.handle, db_handle, &keyVal, &dataVal)
 				}
 				guard valueResult == 0 else {
@@ -176,7 +176,7 @@ public struct Database {
 					throw LMDBError(returnCode:valueResult)
 				}
 			} else {
-				let valueResult = try Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
+				let valueResult = Transaction.instantTransaction(environment:env_handle, readOnly:true, parent:nil) { someTransaction in
 					return mdb_get(someTransaction.handle, db_handle, &keyVal, &dataVal)
 				}
 				if valueResult == 0 {
