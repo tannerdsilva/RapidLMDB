@@ -13,7 +13,7 @@ public class Cursor:Sequence {
 	//CursorIterator helps the `Cursor` class conform to the `Sequence` protocol that allows for easily iterating over a databases contents
 	public struct CursorIterator:IteratorProtocol {
 		internal let handle:OpaquePointer?
-		var first:Bool = false
+		var first:Bool = true
 		public var count:Int
 		
 		fileprivate init(count:Int, handle:OpaquePointer?) {
