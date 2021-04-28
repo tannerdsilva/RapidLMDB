@@ -2,7 +2,7 @@
 
 RapidLMDB is a Swift LMDB framework designed to provide the developer full access to the LMDB API while also simultaneously making the syntax as efficient as possible. Designed for rapid development and performance, RapidLMDB is an uncompromising Swift wrapper to the LMDB core.
 
-LMDB version: 0.9.28
+Version tags for this repository align with the official release tags of the official LMDB repository managed by Symas Corporation.
 
 # Getting Started
 
