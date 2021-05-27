@@ -92,20 +92,24 @@ public class Environment {
 	}
 	
 	
-	public func transact<R>(readOnly:Bool = true, _ txFunc:(Transaction) throws -> R) throws -> R {
+	public func transact<R>(readOnly:Bool = true, _ txFunc:(Transaction) throws -> R) rethrows -> R {
 		//create the new transaction
-		let newTransaction = try Transaction(environment:self.handle, readOnly:readOnly, parent:nil)
+		let newTransaction = try! Transaction(environment:self.handle, readOnly:readOnly, parent:nil)
 		
 		let captureValue:R
 		//run the transaction handler
 		do {
 			captureValue = try txFunc(newTransaction)
 		} catch let error {
-			//if the transaction handler throws, abort the transaction and return
-			newTransaction.abort()
+			//if the transaction handler throws, abort the transaction and return 
+			if newTransaction.isOpen == true {
+				newTransaction.abort()
+			}
 			throw error
 		}
-		try! newTransaction.commit()
+		if newTransaction.isOpen == true {
+			try! newTransaction.commit()
+		}
 		return captureValue
 	}
 
