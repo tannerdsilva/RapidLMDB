@@ -2,12 +2,6 @@ import CLMDB
 import Foundation
 
 public class Transaction {
-	//actions that can be taken on a transaction
-	public enum Action:UInt8 {
-		case commit
-		case abort
-	}
-	
 	public struct Flags:OptionSet {
         public let rawValue:UInt32
         public init(rawValue:UInt32) { self.rawValue = rawValue }
