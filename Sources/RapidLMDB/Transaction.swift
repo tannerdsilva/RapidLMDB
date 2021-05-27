@@ -1,7 +1,7 @@
 import CLMDB
 import Foundation
 
-public struct Transaction {
+public class Transaction {
 	//actions that can be taken on a transaction
 	public enum Action:UInt8 {
 		case commit
@@ -24,6 +24,8 @@ public struct Transaction {
 	public var env_handle:OpaquePointer?
 	public var handle:OpaquePointer?
 	
+	internal var isOpen = true
+	
 	//FOR INTERNAL USE
 	//quickly spawn a transaction for one-time use. This function is typically used to create single-use transactions when a user has not specified a transaction 
 	internal static func instantTransaction<R>(environment:OpaquePointer?, readOnly:Bool, parent:OpaquePointer?, _ handler:(Transaction) throws -> R) rethrows -> R {
@@ -32,10 +34,14 @@ public struct Transaction {
 		do {
 			captureReturn = try handler(newTransaction)
 		} catch let error {
-			newTransaction.abort()
+			if newTransaction.isOpen == true {
+				newTransaction.abort()
+			}
 			throw error
 		}
-		try! newTransaction.commit()
+		if newTransaction.isOpen == true {
+			try! newTransaction.commit()
+		}
 		return captureReturn
 	}
 	
@@ -66,6 +72,7 @@ public struct Transaction {
 		guard commitResult == 0 else {
 			throw LMDBError(returnCode:commitResult)
 		}
+		self.isOpen = false
 	}
 	public func reset() {
 		mdb_txn_reset(handle)
@@ -78,5 +85,6 @@ public struct Transaction {
 	}
 	public func abort() {
 		mdb_txn_abort(handle)
+		self.isOpen = false
 	}
 }
