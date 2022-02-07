@@ -35,7 +35,7 @@ public enum LMDBError: Error {
     
     case other(returnCode: Int32)
     
-    init(returnCode: Int32) {
+    public init(returnCode: Int32) {
         switch returnCode {
 			case MDB_KEYEXIST: self = .keyExists
 			case MDB_NOTFOUND: self = .notFound
