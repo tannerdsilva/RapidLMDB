@@ -150,7 +150,7 @@ public class Cursor:Sequence {
 	}
 	
 	//a cursor consists of the cursor handle: `handle`, the database handle that created the cursor: `db_handle`, and the transaction it was created in: `tx_handle`
-	internal let handle:OpaquePointer?
+	public let handle:OpaquePointer?
 	fileprivate let db_handle:MDB_dbi
 	fileprivate let tx_handle:OpaquePointer?
 
