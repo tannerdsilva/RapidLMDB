@@ -3,40 +3,40 @@ import Foundation
 
 public enum LMDBError: Error {
 
-    // LMDB defined errors.
-    case keyExists
-    case notFound
-    case pageNotFound
-    case corrupted
-    case panic
-    case versionMismatch
-    case invalid
-    case mapFull
-    case dbsFull
-    case readersFull
-    case tlsFull
-    case txnFull
-    case cursorFull
-    case pageFull
-    case mapResized
-    case incompatible
-    case badReaderSlot
-    case badTransaction
-    case badValueSize
-    case badDBI
-    case problem
+	// LMDB defined errors.
+	case keyExists
+	case notFound
+	case pageNotFound
+	case corrupted
+	case panic
+	case versionMismatch
+	case invalid
+	case mapFull
+	case dbsFull
+	case readersFull
+	case tlsFull
+	case txnFull
+	case cursorFull
+	case pageFull
+	case mapResized
+	case incompatible
+	case badReaderSlot
+	case badTransaction
+	case badValueSize
+	case badDBI
+	case problem
 
-    // OS errors
-    case invalidParameter
-    case outOfDiskSpace
-    case outOfMemory
-    case ioError
-    case accessViolation
-    
-    case other(returnCode: Int32)
-    
-    public init(returnCode: Int32) {
-        switch returnCode {
+	// OS errors
+	case invalidParameter
+	case outOfDiskSpace
+	case outOfMemory
+	case ioError
+	case accessViolation
+
+	case other(returnCode: Int32)
+
+	public init(returnCode: Int32) {
+		switch returnCode {
 			case MDB_KEYEXIST: self = .keyExists
 			case MDB_NOTFOUND: self = .notFound
 			case MDB_PAGE_NOTFOUND: self = .pageNotFound
@@ -65,6 +65,6 @@ public enum LMDBError: Error {
 			case EACCES: self = .accessViolation
 			
 			default: self = .other(returnCode: returnCode)
-        }
-    }
+		}
+	}
 }

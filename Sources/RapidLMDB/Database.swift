@@ -5,31 +5,31 @@ import CLMDB
 
 public struct Database {
 	public struct Flags:OptionSet {
-        public let rawValue:UInt32
-        public init(rawValue:UInt32) { self.rawValue = rawValue }
-    
-        public static let reverseKey = Flags(rawValue: UInt32(MDB_REVERSEKEY))
-        public static let dupSort = Flags(rawValue: UInt32(MDB_DUPSORT))
-        public static let integerKey = Flags(rawValue: UInt32(MDB_INTEGERKEY))
-        public static let dupFixed = Flags(rawValue: UInt32(MDB_DUPFIXED))
-        public static let integerDup = Flags(rawValue: UInt32(MDB_INTEGERDUP))
-        public static let reverseDup = Flags(rawValue: UInt32(MDB_REVERSEDUP))
-        public static let create = Flags(rawValue: UInt32(MDB_CREATE))
-    }
-    public struct Statistics {
-    	public let pageSize:UInt32
-    	public let depth:UInt32
-    	public let branch_pages:size_t
-    	public let leaf_pages:size_t
-    	public let overflow_pages:size_t
-    	public let entries:size_t
-    }
-    
-    public let name:String
-    public let env_handle:OpaquePointer?
-    public let db_handle:MDB_dbi
-    
-    //primary initializer
+		public let rawValue:UInt32
+		public init(rawValue:UInt32) { self.rawValue = rawValue }
+
+		public static let reverseKey = Flags(rawValue: UInt32(MDB_REVERSEKEY))
+		public static let dupSort = Flags(rawValue: UInt32(MDB_DUPSORT))
+		public static let integerKey = Flags(rawValue: UInt32(MDB_INTEGERKEY))
+		public static let dupFixed = Flags(rawValue: UInt32(MDB_DUPFIXED))
+		public static let integerDup = Flags(rawValue: UInt32(MDB_INTEGERDUP))
+		public static let reverseDup = Flags(rawValue: UInt32(MDB_REVERSEDUP))
+		public static let create = Flags(rawValue: UInt32(MDB_CREATE))
+	}
+	public struct Statistics {
+		public let pageSize:UInt32
+		public let depth:UInt32
+		public let branch_pages:size_t
+		public let leaf_pages:size_t
+		public let overflow_pages:size_t
+		public let entries:size_t
+	}
+
+	public let name:String
+	public let env_handle:OpaquePointer?
+	public let db_handle:MDB_dbi
+
+	//primary initializer
 	public init(environment:OpaquePointer?, name:String, flags:Flags, tx:Transaction) throws {
 		var captureHandle = MDB_dbi()
 		try name.withCString { namePointer in

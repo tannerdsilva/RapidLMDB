@@ -3,18 +3,18 @@ import Foundation
 
 public class Transaction {
 	public struct Flags:OptionSet {
-        public let rawValue:UInt32
-        public init(rawValue:UInt32) { self.rawValue = rawValue }
-    
+		public let rawValue:UInt32
+		public init(rawValue:UInt32) { self.rawValue = rawValue }
+
 		public static let noOverwrite = Flags(rawValue: UInt32(MDB_NOOVERWRITE))
-        public static let noDupData = Flags(rawValue: UInt32(MDB_REVERSEKEY))
+		public static let noDupData = Flags(rawValue: UInt32(MDB_REVERSEKEY))
 		
 		public static let current = Flags(rawValue: UInt32(MDB_CURRENT))
 		public static let reserve = Flags(rawValue: UInt32(MDB_RESERVE))
 		public static let append = Flags(rawValue: UInt32(MDB_APPEND))
 		public static let appendDup = Flags(rawValue: UInt32(MDB_APPENDDUP))
 		public static let multiple = Flags(rawValue: UInt32(MDB_MULTIPLE))
-    }
+	}
 	
 	public typealias Handler = (Transaction) throws -> Void
 	

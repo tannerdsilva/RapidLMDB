@@ -6,31 +6,31 @@ public class Environment {
 	Configuration flags of the environment
 	*/
 	public struct Flags: OptionSet {
-        public let rawValue: UInt32
-        public init(rawValue: UInt32) { self.rawValue = rawValue }
+		public let rawValue: UInt32
+		public init(rawValue: UInt32) { self.rawValue = rawValue }
 
-        public static let fixedMap = Flags(rawValue: UInt32(MDB_FIXEDMAP))
-        public static let noSubDir = Flags(rawValue: UInt32(MDB_NOSUBDIR))
-        public static let noSync = Flags(rawValue: UInt32(MDB_NOSYNC))
-        public static let readOnly = Flags(rawValue: UInt32(MDB_RDONLY))
-        public static let noMetaSync = Flags(rawValue: UInt32(MDB_NOMETASYNC))
-        public static let writeMap = Flags(rawValue: UInt32(MDB_WRITEMAP))
-        public static let mapAsync = Flags(rawValue: UInt32(MDB_MAPASYNC))
-        public static let noTLS = Flags(rawValue: UInt32(MDB_NOTLS))
-        public static let noLock = Flags(rawValue: UInt32(MDB_NOLOCK))
-        public static let noReadahead = Flags(rawValue: UInt32(MDB_NORDAHEAD))
-        public static let noMemoryInit = Flags(rawValue: UInt32(MDB_NOMEMINIT))
-    }
-    
-    /*
-    Opened Database Cache
-    */
+		public static let fixedMap = Flags(rawValue: UInt32(MDB_FIXEDMAP))
+		public static let noSubDir = Flags(rawValue: UInt32(MDB_NOSUBDIR))
+		public static let noSync = Flags(rawValue: UInt32(MDB_NOSYNC))
+		public static let readOnly = Flags(rawValue: UInt32(MDB_RDONLY))
+		public static let noMetaSync = Flags(rawValue: UInt32(MDB_NOMETASYNC))
+		public static let writeMap = Flags(rawValue: UInt32(MDB_WRITEMAP))
+		public static let mapAsync = Flags(rawValue: UInt32(MDB_MAPASYNC))
+		public static let noTLS = Flags(rawValue: UInt32(MDB_NOTLS))
+		public static let noLock = Flags(rawValue: UInt32(MDB_NOLOCK))
+		public static let noReadahead = Flags(rawValue: UInt32(MDB_NORDAHEAD))
+		public static let noMemoryInit = Flags(rawValue: UInt32(MDB_NOMEMINIT))
+	}
+
+	/*
+	Opened Database Cache
+	*/
 //    var databases = [String:Database]()
 //    let databaseAccess = DispatchQueue(label:"com.tannersilva.database.sync")
-    
-    /*
-    Primary environment handle
-    */
+
+	/*
+	Primary environment handle
+	*/
 	public var handle:OpaquePointer? = nil
 		
 	/*
@@ -48,10 +48,10 @@ public class Environment {
 		}
 	}
 	public var max_keysize:Int32 {
-    	get {
-    		return mdb_env_get_maxkeysize(handle)
-    	}
-    }
+		get {
+			return mdb_env_get_maxkeysize(handle)
+		}
+	}
 	
 	/*
 	Primary initializer
