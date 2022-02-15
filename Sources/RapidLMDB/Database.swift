@@ -230,4 +230,30 @@ public struct Database {
 	public func cursor(tx:Transaction) throws -> Cursor {
 		return try Cursor(transaction:tx.handle, db:self.db_handle)
 	}
+	
+	//compare two values according to the key comparison function of the database
+	public func compareKeys<D:DataConvertible>(_ data1:D, _ data2:D, tx:Transaction) -> Int32 {
+		var data1Export = data1.exportData()
+		var data2Export = data2.exportData()
+		return data1Export.withUnsafeMutableBytes { data1Buffer -> Int32 in
+			var data1Val = MDB_val(mv_size:data1Buffer.count, mv_data:data1Buffer.baseAddress)
+			return data2Export.withUnsafeMutableBytes { data2Buffer -> Int32 in
+				var data2Val = MDB_val(mv_size:data2Buffer.count, mv_data:data2Buffer.baseAddress)
+				return mdb_cmp(tx.handle, self.db_handle, &data1Val, &data2Val)
+			}
+		}
+	}
+	
+	//compare two values according to the value comparison function of the database
+	public func compareValues<D:DataConvertible>(_ data1:D, _ data2:D, tx:Transaction) -> Int32 {
+		var data1Export = data1.exportData()
+		var data2Export = data2.exportData()
+		return data1Export.withUnsafeMutableBytes { data1Buffer -> Int32 in
+			var data1Val = MDB_val(mv_size:data1Buffer.count, mv_data:data1Buffer.baseAddress)
+			return data2Export.withUnsafeMutableBytes { data2Buffer -> Int32 in
+				var data2Val = MDB_val(mv_size:data2Buffer.count, mv_data:data2Buffer.baseAddress)
+				return mdb_dcmp(tx.handle, self.db_handle, &data1Val, &data2Val)
+			}
+		}
+	}
 }
