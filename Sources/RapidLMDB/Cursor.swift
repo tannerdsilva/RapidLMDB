@@ -294,6 +294,32 @@ public class Cursor:Sequence {
 		return CursorIterator(count:Int(statObject.ms_entries), handle:self.handle)
 	}
 	
+	//compare two values according to the key comparison function of the database
+	public func compareKeys<D:DataConvertible>(_ data1:D, _ data2:D) -> Int32 {
+		var data1Export = data1.exportData()
+		var data2Export = data2.exportData()
+		return data1Export.withUnsafeMutableBytes { data1Buffer -> Int32 in
+			var data1Val = MDB_val(mv_size:data1Buffer.count, mv_data:data1Buffer.baseAddress)
+			return data2Export.withUnsafeMutableBytes { data2Buffer -> Int32 in
+				var data2Val = MDB_val(mv_size:data2Buffer.count, mv_data:data2Buffer.baseAddress)
+				return mdb_cmp(self.tx_handle, self.db_handle, &data1Val, &data2Val)
+			}
+		}
+	}
+	
+	//compare two values according to the value comparison function of the database
+	public func compareValues<D:DataConvertible>(_ data1:D, _ data2:D) -> Int32 {
+		var data1Export = data1.exportData()
+		var data2Export = data2.exportData()
+		return data1Export.withUnsafeMutableBytes { data1Buffer -> Int32 in
+			var data1Val = MDB_val(mv_size:data1Buffer.count, mv_data:data1Buffer.baseAddress)
+			return data2Export.withUnsafeMutableBytes { data2Buffer -> Int32 in
+				var data2Val = MDB_val(mv_size:data2Buffer.count, mv_data:data2Buffer.baseAddress)
+				return mdb_dcmp(self.tx_handle, self.db_handle, &data1Val, &data2Val)
+			}
+		}
+	}
+	
 	//lmdb documentation suggests that read-only cursors always be closed. Therefore, Cursor is implemented as a class with this deinit block to automatically close the cursor on the users behalf
 	deinit {
 		mdb_cursor_close(self.handle)
