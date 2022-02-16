@@ -57,10 +57,6 @@ public class Transaction {
 		self.handle = start_handle
 	}
 	
-	public func subTransact(readOnly:Bool = true) throws -> Transaction {
-		return try Transaction(environment:self.env_handle, readOnly:readOnly, parent:self.handle)
-	}
-	
 	public func subTransact<R>(readOnly:Bool, _ txFunc:(Transaction) throws -> R) rethrows -> R {
 		//create the new transaction
 		let newTransaction = try! Transaction(environment:self.handle, readOnly:readOnly, parent:self.handle)
