@@ -228,7 +228,7 @@ public struct Database {
 	Cursors
 	*/
 	public func cursor(tx:Transaction) throws -> Cursor {
-		return try Cursor(transaction:tx.handle, db:self.db_handle)
+		return try Cursor(transaction:tx.handle, db:self.db_handle, readOnly:tx.readOnly)
 	}
 	
 	//compare two values according to the key comparison function of the database

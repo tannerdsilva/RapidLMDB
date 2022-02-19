@@ -21,6 +21,8 @@ public class Transaction {
 	public var env_handle:OpaquePointer?
 	public var handle:OpaquePointer?
 	
+	public let readOnly:Bool
+	
 	internal var isOpen = true
 	
 	//FOR INTERNAL USE
@@ -55,6 +57,7 @@ public class Transaction {
 			throw LMDBError(returnCode:createResult)
 		}
 		self.handle = start_handle
+		self.readOnly = readOnly
 	}
 	
 	public func subTransact<R>(readOnly:Bool, _ txFunc:(Transaction) throws -> R) rethrows -> R {

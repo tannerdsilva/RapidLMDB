@@ -153,9 +153,10 @@ public class Cursor:Sequence {
 	public let handle:OpaquePointer?
 	fileprivate let db_handle:MDB_dbi
 	fileprivate let tx_handle:OpaquePointer?
-
+	fileprivate let readOnly:Bool
+	
 	//initializer
-	internal init(transaction:OpaquePointer?, db:MDB_dbi) throws {
+	internal init(transaction:OpaquePointer?, db:MDB_dbi, readOnly:Bool) throws {
 		var buildCursor:OpaquePointer? = nil
 		let openCursorResult = mdb_cursor_open(transaction, db, &buildCursor)
 		guard openCursorResult == 0 else {
@@ -164,6 +165,7 @@ public class Cursor:Sequence {
 		self.handle = buildCursor
 		self.db_handle = db
 		self.tx_handle = transaction
+		self.readOnly = readOnly
 	}
 	
 	//returns the amount of values that are stored in the database for the particular
@@ -234,7 +236,9 @@ public class Cursor:Sequence {
 	//get command where no key or value are provided as input
 	public func get(_ operation:Operation) throws -> (key:Data, value:Data) {
 		var captureKey = MDB_val()
+		captureKey.mv_size = 0
 		var captureVal = MDB_val()
+		captureVal.mv_size = 0
 		let cursorResult = mdb_cursor_get(handle, &captureKey, &captureVal, operation.mdbValue)
 		guard cursorResult == 0 else {
 			throw LMDBError(returnCode:cursorResult)
@@ -322,6 +326,8 @@ public class Cursor:Sequence {
 	
 	//lmdb documentation suggests that read-only cursors always be closed. Therefore, Cursor is implemented as a class with this deinit block to automatically close the cursor on the users behalf
 	deinit {
-		mdb_cursor_close(self.handle)
+		if (self.readOnly) {
+			mdb_cursor_close(self.handle)
+		}
 	}
 }
