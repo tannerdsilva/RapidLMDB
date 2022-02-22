@@ -44,6 +44,11 @@ public class Transaction {
 		return captureReturn
 	}
 	
+	//create a transaction for lifecycle management outside of transaction blocks
+	public convenience init(environment:Environment, readOnly:Bool, parent:Transaction?) throws {
+		try self.init(environment:environment.handle, readOnly:readOnly, parent:parent?.handle)
+	}
+	
 	//user cant directly make transactions sorry. trying to simplify usage by internalizing the explicit initialization of these things
 	internal init(environment:OpaquePointer?, readOnly:Bool, parent:OpaquePointer? = nil) throws {
 		self.env_handle = environment
