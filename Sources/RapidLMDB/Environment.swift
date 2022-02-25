@@ -56,7 +56,7 @@ public class Environment {
 	/*
 	Primary initializer
 	*/
-	public init(path:String, flags:Flags = [], mapSize:size_t? = nil, maxReaders:MDB_dbi? = 128, maxDBs:MDB_dbi? = 128) throws {
+	public init(path:String, flags:Flags = [], mapSize:size_t? = nil, maxReaders:MDB_dbi? = 256, maxDBs:MDB_dbi? = 128) throws {
 		var environmentHandle:OpaquePointer? = nil;
 		let envStatus = mdb_env_create(&environmentHandle)
 		guard envStatus == 0 else {
@@ -135,6 +135,15 @@ public class Environment {
 			guard copyResult == 0 else {
 				throw LMDBError(returnCode:copyResult)
 			}
+		}
+	}
+	
+	/// Flush the data buffers to the disk. This function is primarily useful in situations where an Environment was opened with ``Flags.noSync`` or ``Flags.noMetaSync``. This call is invalid if the environment was opened with ``Flags.readOnly``.
+	/// - Parameter force: Force a synchronous flush when true. If the Environment was opened with ``Environment.Flags.noSync``, flushes will be omitted when this parameter is false. If the Environment was opened with ``Environment.Flags.mapAsync``, flushes will be asynchronous when this parameter is false.
+	public func sync(force:Bool = true) throws {
+		let syncStatus = mdb_env_sync(self.handle, (force == true ? 1 : 0))
+		guard syncStatus == 0 else {
+			throw LMDBError(returnCode:syncStatus)
 		}
 	}
 	
