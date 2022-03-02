@@ -311,6 +311,10 @@ public class Cursor:Sequence {
 		}
 	}
 	
+	public func comareKeys(_ data1:inout MDB_val, _ data2:inout MDB_val) -> Int32 {
+		return mdb_cmp(self.tx_handle, self.db_handle, &data1, &data2)
+	}
+	
 	//compare two values according to the value comparison function of the database
 	public func compareValues<D:DataConvertible>(_ data1:D, _ data2:D) -> Int32 {
 		var data1Export = data1.exportData()
@@ -322,6 +326,10 @@ public class Cursor:Sequence {
 				return mdb_dcmp(self.tx_handle, self.db_handle, &data1Val, &data2Val)
 			}
 		}
+	}
+	
+	public func compareValues(_ data1:inout MDB_val, _ data2:inout MDB_val) -> Int32 {
+		return mdb_dcmp(self.tx_handle, self.db_handle, &data1, &data2)
 	}
 	
 	//lmdb documentation suggests that read-only cursors always be closed. Therefore, Cursor is implemented as a class with this deinit block to automatically close the cursor on the users behalf
