@@ -151,9 +151,9 @@ public class Cursor:Sequence {
 	
 	//a cursor consists of the cursor handle: `handle`, the database handle that created the cursor: `db_handle`, and the transaction it was created in: `tx_handle`
 	public let handle:OpaquePointer?
-	fileprivate let db_handle:MDB_dbi
-	fileprivate let tx_handle:OpaquePointer?
-	fileprivate let readOnly:Bool
+	public let db_handle:MDB_dbi
+	public let tx_handle:OpaquePointer?
+	public let readOnly:Bool
 	
 	//initializer
 	internal init(transaction:OpaquePointer?, db:MDB_dbi, readOnly:Bool) throws {
