@@ -147,6 +147,15 @@ public class Environment {
 		}
 	}
 	
+	@discardableResult public func readerCheck() throws -> Int32 {
+		var deadCheck:Int32 = 0
+		let clearCheck = mdb_reader_check(self.handle, &deadCheck)
+		guard clearCheck == MDB_SUCCESS else {
+			throw LMDBError(returnCode:clearCheck)
+		}
+		return deadCheck
+	}
+	
 	deinit {
 		mdb_env_close(handle)
 	}
