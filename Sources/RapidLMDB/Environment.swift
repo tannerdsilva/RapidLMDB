@@ -56,7 +56,7 @@ public class Environment {
 	/*
 	Primary initializer
 	*/
-	public init(path:String, flags:Flags = [], mapSize:size_t? = nil, maxReaders:MDB_dbi? = 256, maxDBs:MDB_dbi? = 128) throws {
+	public init(path:String, flags:Flags = [], mapSize:size_t? = nil, maxReaders:MDB_dbi? = 256, maxDBs:MDB_dbi? = 128, checkReaders:Bool = true) throws {
 		var environmentHandle:OpaquePointer? = nil;
 		let envStatus = mdb_env_create(&environmentHandle)
 		guard envStatus == 0 else {
@@ -86,6 +86,14 @@ public class Environment {
 			let openStatus = mdb_env_open(environmentHandle, stringBuffer, UInt32(flags.rawValue), fileMode)
 			guard openStatus == 0 else {
 				throw LMDBError(returnCode:openStatus)
+			}
+		}
+		
+		if checkReaders == true {
+			var deadReaders:Int32 = 0
+			let checkVals = mdb_reader_check(environmentHandle, &deadReaders)
+			guard checkVals == MDB_SUCCESS else {
+				throw LMDBError(returnCode:checkVals)
 			}
 		}
 		self.handle = environmentHandle
